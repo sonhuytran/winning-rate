@@ -1,6 +1,6 @@
 {
   "name": "winning-rate",
-  "version": "0.1.0-beta",
+  "version": "0.1.0",
   "description": "Winning rate calculator",
   "main": "index.js",
   "scripts": {
