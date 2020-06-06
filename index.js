@@ -32,16 +32,16 @@ const logger = require('./logger');
  * @type {{PERMILLE: number, PERCENT: number, PERMYRIAD: number}}
  */
 const types = {
-    PERCENT: 100,
-    PERMILLE: 1000,
-    PERMYRIAD: 10000,
+  PERCENT: 100,
+  PERMILLE: 1000,
+  PERMYRIAD: 10000,
 }
 
 /**
  *
  */
 const percentageFormat = (value, type) => {
-    return `${value / (type / 100)}%`;
+  return `${value / (type / 100)}%`;
 }
 
 /**
@@ -52,20 +52,27 @@ const percentageFormat = (value, type) => {
  * @returns {{current: *, current_percentage: string, wins_next: number}}
  */
 const calcNext = (wins, matches, type) => {
-    const current = math.round(wins * type / matches);
-    const next = current + 1;
-    let winsNext = math.ceil((matches * next - type * wins) / (type - next));
+  const current = math.round(wins * type / matches);
+  const nexts = [];
+
+  for (let nextRate = current + 1; nextRate <= type - 1; nextRate++) {
+    let winsNext = math.ceil((matches * nextRate - type * wins) / (type - nextRate));
 
     if (winsNext < 1) {
-        winsNext = 1;
+      winsNext = 1;
     }
 
-    return {
-        current: current,
-        next_rate: percentageFormat(current + 1, type),
-        current_percentage: percentageFormat(current, type),
-        wins_next: winsNext,
-    }
+    nexts.push({
+      rate: percentageFormat(nextRate, type),
+      wins: winsNext,
+    });
+  }
+
+  return {
+    current: current,
+    current_percentage: percentageFormat(current, type),
+    next_rates: nexts
+  }
 }
 
 /**
@@ -74,13 +81,13 @@ const calcNext = (wins, matches, type) => {
  * @param matches
  */
 const calc = (wins, matches) => {
-    const result = {};
+  const result = {};
 
-    for (let [key, value] of Object.entries(types)) {
-        result[key] = calcNext(wins, matches, value);
-    }
+  for (let [key, value] of Object.entries(types)) {
+    result[key] = calcNext(wins, matches, value);
+  }
 
-    return result;
+  return result;
 }
 
 /**
@@ -88,18 +95,18 @@ const calc = (wins, matches) => {
  * @param params
  */
 const winningRateCalc = (params) => {
-    params = params || {};
-    params.wins = Number(params['wins'] || '0');
-    params.loses = Number(params['loses'] || '0');
-    params.matches = Number(params['matches'] || '0');
-    params.ties = Number(params['ties'] || '0');
+  params = params || {};
+  params.wins = Number(params['wins'] || '0');
+  params.loses = Number(params['loses'] || '0');
+  params.matches = Number(params['matches'] || '0');
+  params.ties = Number(params['ties'] || '0');
 
-    if (params.matches < 0) {
-        // TODO
-        return {};
-    }
+  if (params.matches < 0) {
+    // TODO
+    return {};
+  }
 
-    return calc(params.wins, params.matches);
+  return calc(params.wins, params.matches);
 }
 
 module.exports = winningRateCalc;
@@ -107,14 +114,14 @@ module.exports = winningRateCalc;
 const args = process.argv.slice(2);
 
 if (args.length >= 2) {
-    const params = {
-        matches: Number(args[0]),
-        wins: Number(args[1]),
-    }
-    // console.info(chalk.redBright('params = '), chalk.red(JSON.stringify(params)));
-    logger.info(params);
+  const params = {
+    matches: Number(args[0]),
+    wins: Number(args[1]),
+  }
+  // console.info(chalk.redBright('params = '), chalk.red(JSON.stringify(params)));
+  logger.info(params);
 
-    const result = winningRateCalc(params);
-    // console.info(chalk.greenBright(JSON.stringify(result)));
-    logger.info(result);
+  const result = winningRateCalc(params);
+  // console.info(chalk.greenBright(JSON.stringify(result)));
+  logger.info(result);
 }

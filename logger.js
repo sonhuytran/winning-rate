@@ -1,4 +1,4 @@
-const fs = require('fs'),
+const // fs = require('fs'),
     winston = require("winston"),
     {createLogger, format, transports} = winston;
 // dateformat = require("dateformat"),
@@ -15,8 +15,8 @@ module.exports = createLogger({
                 format.simple(),
             )
         }),
-        new transports.Stream({
-            stream: fs.createWriteStream('./example.log')
-        })
+        // new transports.Stream({
+        //     stream: fs.createWriteStream('./example.log')
+        // })
     ]
 });
