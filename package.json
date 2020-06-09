@@ -1,6 +1,6 @@
 {
   "name": "winning-rate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Winning rate calculator",
   "main": "index.js",
   "scripts": {
@@ -17,10 +17,7 @@
   },
   "homepage": "https://github.com/sonhuytran/winning-rate#readme",
   "dependencies": {
-    "chalk": "^4.0.0",
-    "dateformat": "^3.0.3",
-    "mathjs": "^7.0.1",
-    "winston": "^3.2.1"
+    "mathjs": "^7.0.1"
   },
   "devDependencies": {
     "@types/node": "^14.0.11"
