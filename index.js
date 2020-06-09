@@ -76,23 +76,15 @@ const winningRateCalc = (params) => {
   params.matches = Number(params['matches'] || '0');
   params.ties = Number(params['ties'] || '0');
 
-  if (params.matches < 0) {
-    // TODO
-    return {};
+  if (params.matches <= 0) {
+    return {
+      current: 0,
+      current_percentage: percentageFormat(0, types.PERCENT),
+      next_rates: []
+    };
   }
 
   return calc(params.wins, params.matches);
 }
 
 module.exports = winningRateCalc;
-
-const args = process.argv.slice(2);
-
-if (args.length >= 2) {
-  const params = {
-    matches: Number(args[0]),
-    wins: Number(args[1]),
-  }
-
-  const result = winningRateCalc(params);
-}
