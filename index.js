@@ -27,7 +27,7 @@ const percentageFormat = (value, type) => {
  * @returns {{current: *, current_percentage: string, wins_next: number}}
  */
 const calcNext = (wins, matches, type) => {
-  const current = math.round(wins * type / matches);
+  const current = math.floor(wins * type / matches);
   const nexts = [];
 
   for (let nextRate = current + 1; nextRate <= type - 1; nextRate++) {
